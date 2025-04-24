@@ -21,6 +21,7 @@
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       width: 300px;
+      text-align: center;
     }
     h2 {
       margin-top: 0;
@@ -47,6 +48,18 @@
     input[type="submit"]:hover {
       background-color: #0056b3;
     }
+    .buttonb {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .buttonb:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -61,6 +74,7 @@ ob_start();
     <input type="password" id="password" placeholder="Heslo" required>
     <input type="file" id="obrazek" accept="image/*">
     <input type="submit" value="Registrovat se">
+    <button class="buttonb" onclick="window.location.href='prihlaseni.php'">Prihlášení</button>
   </form>
 
   <script>
@@ -73,7 +87,7 @@ ob_start();
       formData.append("password", document.getElementById("password").value);
       formData.append("obrazek", document.getElementById("obrazek").files[0]);
 
-      fetch("backend.php?endpoint=register", {
+      fetch("backend.php?action=register", {
         method: "POST",
         body: formData,
       })
@@ -87,7 +101,7 @@ ob_start();
           console.log("Odpověď z backendu:", data);
           if (data.message === "User registered") {
             alert("Registrace úspěšná!");
-            window.location.href = "prihlaseni.html";
+            window.location.href = "jidelnicek.php";
           } else {
             alert("Chyba: " + JSON.stringify(data));
           }

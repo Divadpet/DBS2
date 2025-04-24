@@ -166,3 +166,62 @@ END;
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE TRIGGER ZabranaDuplicityUzivatele
+BEFORE INSERT ON Uzivatele
+FOR EACH ROW
+BEGIN
+    DECLARE pocet INT;
+    
+    SELECT COUNT(*) INTO pocet
+    FROM Uzivatele
+    WHERE Jmeno = NEW.Jmeno AND Prijmeni = NEW.Prijmeni;
+    
+    IF pocet > 0 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'Uživatel s tímto jménem a příjmením již existuje!';
+    END IF;
+END //
+
+DELIMITER ;
+DELIMITER //
+
+CREATE PROCEDURE PridatCeleJidlo (
+    IN p_HlavnicastjidlaID INT,
+    IN p_UzivatelID INT,
+    IN p_OmackaID INT,
+    IN p_PrilohaID INT,
+    IN p_KategorieID INT,
+    IN p_TypjidlaID INT,
+    IN p_Obloha BOOL,
+    IN p_Casjidla DATETIME
+)
+BEGIN
+    INSERT INTO Celajidla (
+        HlavnicastjidlaID,
+        UzivatelID,
+        OmackaID,
+        PrilohaID,
+        KategorieID,
+        Pocetsnezenikombinace,
+        TypjidlaID,
+        Obloha,
+        Casjidla
+    )
+    VALUES (
+        p_HlavnicastjidlaID,
+        p_UzivatelID,
+        p_OmackaID,
+        p_PrilohaID,
+        p_KategorieID,
+        1,
+        p_TypjidlaID,
+        p_Obloha,
+        p_Casjidla
+    );
+END //
+
+DELIMITER ;
+
+
